@@ -1,0 +1,16 @@
+# Add or ensure these directives in /opt/homebrew/etc/httpd/httpd.conf
+
+LoadModule rewrite_module lib/httpd/modules/mod_rewrite.so
+LoadModule php_module /opt/homebrew/opt/php/lib/httpd/modules/libphp.so
+
+ServerName bitcore.ca:8080
+
+<IfModule dir_module>
+    DirectoryIndex index.php index.html
+</IfModule>
+
+Include /opt/homebrew/etc/httpd/extra/httpd-vhosts.conf
+
+<FilesMatch \.php$>
+    SetHandler application/x-httpd-php
+</FilesMatch>

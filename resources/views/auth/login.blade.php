@@ -8,7 +8,7 @@
         <title>{{ config('app.name', 'Laravel') }} - Login</title>
 
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700|space-grotesk:500,600,700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
@@ -24,7 +24,7 @@
                 <div class="mx-auto w-full max-w-5xl space-y-8">
                     <header class="mx-auto max-w-3xl space-y-3 text-center">
                         <p class="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">Bitcore Access</p>
-                        <h1 class="font-['Space_Grotesk'] text-3xl font-semibold tracking-tight text-white sm:text-4xl">Welcome back</h1>
+                        <h1 class="text-3xl font-semibold tracking-tight text-white sm:text-4xl">Welcome back</h1>
                         <p class="text-sm text-slate-200 sm:text-base">
                             Sign in with your role-specific credentials to access dashboards and operations.
                         </p>
@@ -41,7 +41,7 @@
                     <div class="mx-auto flex w-full flex-wrap items-start justify-center gap-10">
                         <section class="w-full max-w-sm overflow-hidden rounded-[28px] border border-white/20 bg-slate-900/70 p-6 shadow-2xl shadow-black/35 backdrop-blur-md sm:p-7">
                             <div class="mb-5 space-y-1">
-                                <h2 class="font-['Space_Grotesk'] text-2xl font-semibold text-white">{{ __('Admin Login') }}</h2>
+                                <h2 class="text-2xl font-semibold text-white">{{ __('Admin Login') }}</h2>
                                 <p class="text-sm text-slate-100">{{ __('For platform administration and privileged actions.') }}</p>
                             </div>
 
@@ -89,7 +89,7 @@
 
                         <section class="w-full max-w-sm overflow-hidden rounded-[28px] border border-white/20 bg-slate-900/70 p-6 shadow-2xl shadow-black/35 backdrop-blur-md sm:p-7">
                             <div class="mb-5 space-y-1">
-                                <h2 class="font-['Space_Grotesk'] text-2xl font-semibold text-white">{{ __('User Login') }}</h2>
+                                <h2 class="text-2xl font-semibold text-white">{{ __('User Login') }}</h2>
                                 <p class="text-sm text-slate-100">{{ __('For sales and operations day-to-day workflows.') }}</p>
                             </div>
 

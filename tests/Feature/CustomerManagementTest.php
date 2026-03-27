@@ -80,4 +80,44 @@ class CustomerManagementTest extends TestCase
             'id' => $customer->id,
         ]);
     }
+
+    public function test_customer_mutations_redirect_to_return_to_when_supplied(): void
+    {
+        $user = User::factory()->create();
+        $user->assignRole('admin');
+
+        $returnTo = route('dashboard', [
+            'module' => 'shipping',
+            'item' => 'customers',
+            'subtab' => 'existing',
+        ]);
+
+        $this->actingAs($user)
+            ->post(route('customers.store'), [
+                'name' => 'Nexa Logistics',
+                'email' => 'nexa@example.com',
+                'phone' => '555-888-1111',
+                'status' => 'prospect',
+                'return_to' => $returnTo,
+            ])
+            ->assertRedirect($returnTo);
+
+        $customer = Customer::where('email', 'nexa@example.com')->firstOrFail();
+
+        $this->actingAs($user)
+            ->patch(route('customers.update', $customer), [
+                'name' => 'Nexa Logistics Ltd',
+                'email' => 'nexa@example.com',
+                'phone' => '555-888-2222',
+                'status' => 'active',
+                'return_to' => $returnTo,
+            ])
+            ->assertRedirect($returnTo);
+
+        $this->actingAs($user)
+            ->delete(route('customers.destroy', $customer), [
+                'return_to' => $returnTo,
+            ])
+            ->assertRedirect($returnTo);
+    }
 }

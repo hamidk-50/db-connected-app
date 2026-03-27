@@ -18,7 +18,7 @@ class RoleAndPermissionSeeder extends Seeder
     {
         app(PermissionRegistrar::class)->forgetCachedPermissions();
 
-        $permissions = [
+        $basePermissions = [
             'view dashboard',
             'manage users',
             'manage operations',
@@ -26,6 +26,43 @@ class RoleAndPermissionSeeder extends Seeder
             'manage customers',
             'manage mailboxes',
         ];
+        $portalPermissions = [
+            'portal.shipping.access',
+            'portal.accounting.access',
+            'portal.inventory.access',
+        ];
+        $shippingNavPermissions = [
+            'nav.shipping.dashboard.view',
+            'nav.shipping.shipments.view',
+            'nav.shipping.rate_quotes.view',
+            'nav.shipping.tracking.view',
+            'nav.shipping.returns.view',
+            'nav.shipping.customers.view',
+        ];
+        $accountingNavPermissions = [
+            'nav.accounting.dashboard.view',
+            'nav.accounting.invoices.view',
+            'nav.accounting.bills.view',
+            'nav.accounting.payments.view',
+            'nav.accounting.reconciliation.view',
+            'nav.accounting.reports.view',
+        ];
+        $inventoryNavPermissions = [
+            'nav.inventory.dashboard.view',
+            'nav.inventory.stock_overview.view',
+            'nav.inventory.products.view',
+            'nav.inventory.purchase_orders.view',
+            'nav.inventory.adjustments.view',
+            'nav.inventory.cycle_counts.view',
+        ];
+
+        $permissions = array_merge(
+            $basePermissions,
+            $portalPermissions,
+            $shippingNavPermissions,
+            $accountingNavPermissions,
+            $inventoryNavPermissions,
+        );
 
         foreach ($permissions as $permission) {
             Permission::findOrCreate($permission, 'web');
@@ -36,17 +73,32 @@ class RoleAndPermissionSeeder extends Seeder
         $salesRole = Role::findOrCreate('sales', 'web');
 
         $adminRole->syncPermissions(Permission::all());
-        $operationsRole->syncPermissions([
+        $operationsRole->syncPermissions(array_merge([
             'view dashboard',
             'manage operations',
             'manage customers',
             'manage mailboxes',
-        ]);
-        $salesRole->syncPermissions([
+            'portal.shipping.access',
+            'portal.inventory.access',
+        ], $shippingNavPermissions, $inventoryNavPermissions));
+        $salesRole->syncPermissions(array_merge([
             'view dashboard',
             'manage sales',
             'manage customers',
-        ]);
+            'portal.shipping.access',
+            'portal.accounting.access',
+        ], [
+            'nav.shipping.dashboard.view',
+            'nav.shipping.shipments.view',
+            'nav.shipping.rate_quotes.view',
+            'nav.shipping.tracking.view',
+            'nav.shipping.customers.view',
+        ], [
+            'nav.accounting.dashboard.view',
+            'nav.accounting.invoices.view',
+            'nav.accounting.payments.view',
+            'nav.accounting.reports.view',
+        ]));
 
         $adminUser = User::firstOrCreate(
             ['email' => 'admin@example.com'],

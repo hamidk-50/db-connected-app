@@ -54,8 +54,10 @@ class CustomerController extends Controller
             'created_by' => $request->user()->id,
         ]);
 
+        $target = $this->redirectTarget($request, route('customers.index'));
+
         return redirect()
-            ->route('customers.index')
+            ->to($target)
             ->with('status', 'Customer created successfully.');
     }
 
@@ -77,20 +79,24 @@ class CustomerController extends Controller
     {
         $customer->update($request->validated());
 
+        $target = $this->redirectTarget($request, route('customers.index'));
+
         return redirect()
-            ->route('customers.index')
+            ->to($target)
             ->with('status', 'Customer updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Customer $customer): RedirectResponse
+    public function destroy(Request $request, Customer $customer): RedirectResponse
     {
         $customer->delete();
 
+        $target = $this->redirectTarget($request, route('customers.index'));
+
         return redirect()
-            ->route('customers.index')
+            ->to($target)
             ->with('status', 'Customer deleted successfully.');
     }
 
@@ -102,5 +108,28 @@ class CustomerController extends Controller
     private function statuses(): array
     {
         return ['prospect', 'active', 'inactive'];
+    }
+
+    /**
+     * Resolve a safe redirect target after mutations.
+     */
+    private function redirectTarget(Request $request, string $default): string
+    {
+        $returnTo = trim((string) $request->input('return_to', ''));
+
+        if ($returnTo === '') {
+            return $default;
+        }
+
+        if (str_starts_with($returnTo, '/')) {
+            return $returnTo;
+        }
+
+        $parsed = parse_url($returnTo);
+        if (! is_array($parsed) || empty($parsed['host'])) {
+            return $default;
+        }
+
+        return $parsed['host'] === $request->getHost() ? $returnTo : $default;
     }
 }
